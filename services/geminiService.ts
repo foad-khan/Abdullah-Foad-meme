@@ -1,10 +1,8 @@
 
 import { GoogleGenAI, Type } from "@google/genai";
 
-if (!process.env.API_KEY) {
-    throw new Error("API_KEY environment variable not set");
-}
-
+// Initialize the AI client. It's okay if the API key is missing here;
+// the API call will fail gracefully later, and the UI will handle it.
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
 export async function generateCaptionForImage(imageBase64: string): Promise<string> {
