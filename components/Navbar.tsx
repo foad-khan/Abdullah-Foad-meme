@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { SparklesIcon } from './icons';
+import { SparklesIcon } from './icons.tsx';
 
 const Navbar: React.FC = () => {
   return (

@@ -1,11 +1,11 @@
 
 import React, { useState, useRef, useCallback } from 'react';
-import { generateCaptionForImage } from './services/geminiService';
-import { convertFileToBase64 } from './utils/fileUtils';
-import MemeCanvas from './components/MemeCanvas';
-import ControlPanel from './components/ControlPanel';
-import Loader from './components/Loader';
-import Navbar from './components/Navbar';
+import { generateCaptionForImage } from './services/geminiService.ts';
+import { convertFileToBase64 } from './utils/fileUtils.ts';
+import MemeCanvas from './components/MemeCanvas.tsx';
+import ControlPanel from './components/ControlPanel.tsx';
+import Loader from './components/Loader.tsx';
+import Navbar from './components/Navbar.tsx';
 
 declare var GIF: any;
 

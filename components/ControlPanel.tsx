@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { UploadIcon, MagicWandIcon, DownloadIcon, ShareIcon } from './icons';
+import { UploadIcon, MagicWandIcon, DownloadIcon, ShareIcon } from './icons.tsx';
 
 interface ControlPanelProps {
   topText: string;
