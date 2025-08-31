@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { UploadIcon, MagicWandIcon, DownloadIcon } from './icons';
+import { UploadIcon, MagicWandIcon, DownloadIcon, ShareIcon } from './icons';
 
 interface ControlPanelProps {
   topText: string;
@@ -15,7 +15,9 @@ interface ControlPanelProps {
   setFontSize: (size: number) => void;
   onFileChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onSuggestCaption: () => void;
+  onShare: () => void;
   onDownload: () => void;
+  onDownloadGif: () => void;
   fileInputRef: React.RefObject<HTMLInputElement>;
   onTriggerFileUpload: () => void;
   isImageLoaded: boolean;
@@ -34,7 +36,9 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
   setFontSize,
   onFileChange,
   onSuggestCaption,
+  onShare,
   onDownload,
+  onDownloadGif,
   fileInputRef,
   onTriggerFileUpload,
   isImageLoaded,
@@ -96,16 +100,26 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
         </div>
       </div>
 
-      {/* Step 3: Download */}
+      {/* Step 3: Share or Download */}
       <div className={`flex-grow flex flex-col justify-end transition-opacity ${isImageLoaded ? 'opacity-100' : 'opacity-40 pointer-events-none'}`}>
          <div className="space-y-4">
             <h2 className="text-lg font-bold text-gray-300 flex items-center">
                 <span className="bg-indigo-500 text-white rounded-full h-6 w-6 text-xs font-bold flex items-center justify-center mr-3">3</span>
-                Download
+                Share or Download
             </h2>
-            <button onClick={onDownload} className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors">
-                <DownloadIcon className="w-5 h-5" /> Download Meme
-            </button>
+             <div className="space-y-4">
+                <button onClick={onShare} className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors">
+                    <ShareIcon className="w-5 h-5" /> Share
+                </button>
+                <div className="grid grid-cols-2 gap-4">
+                    <button onClick={onDownload} className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors">
+                        <DownloadIcon className="w-5 h-5" /> Download PNG
+                    </button>
+                     <button onClick={onDownloadGif} className="w-full bg-sky-600 hover:bg-sky-700 text-white font-bold py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors">
+                        <DownloadIcon className="w-5 h-5" /> Download GIF
+                    </button>
+                </div>
+            </div>
          </div>
       </div>
     </div>

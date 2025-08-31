@@ -7,6 +7,8 @@ import ControlPanel from './components/ControlPanel';
 import Loader from './components/Loader';
 import Navbar from './components/Navbar';
 
+declare var GIF: any;
+
 const App: React.FC = () => {
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const [topText, setTopText] = useState<string>('');
@@ -61,6 +63,41 @@ const App: React.FC = () => {
     }
   }, [imageSrc]);
 
+  const handleShare = async () => {
+    if (!canvasRef.current) {
+      setError('Canvas not found.');
+      return;
+    }
+
+    if (!navigator.share) {
+      setError('Sharing is not supported on this browser. Please download the image instead.');
+      return;
+    }
+    setError(null);
+
+    const canvas = canvasRef.current;
+    canvas.toBlob(async (blob) => {
+      if (!blob) {
+        setError('Failed to create image blob for sharing.');
+        return;
+      }
+      const file = new File([blob], 'meme.png', { type: 'image/png' });
+      const shareData = {
+        files: [file],
+        title: 'My Meme',
+        text: 'Check out this meme I made!',
+      };
+      
+      try {
+        await navigator.share(shareData);
+      } catch (err) {
+        // This can happen if the user cancels the share dialog.
+        // No need to show an error.
+        console.log('Share was cancelled or failed.', err);
+      }
+    }, 'image/png');
+  };
+
   const handleDownload = () => {
     if (!canvasRef.current) {
       setError('Canvas not found.');
@@ -71,6 +108,47 @@ const App: React.FC = () => {
     link.download = 'meme.png';
     link.href = canvas.toDataURL('image/png');
     link.click();
+  };
+
+  const handleDownloadGif = () => {
+    if (!canvasRef.current) {
+      setError('Canvas not found.');
+      return;
+    }
+    setError(null);
+    setIsLoading(true);
+    setLoadingMessage('Creating your GIF...');
+
+    const canvas = canvasRef.current;
+
+    setTimeout(() => {
+      try {
+        const gif = new GIF({
+          workers: 2,
+          quality: 10,
+          workerScript: 'https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.worker.js',
+        });
+
+        gif.addFrame(canvas, { delay: 500 });
+
+        gif.on('finished', (blob: Blob) => {
+          const link = document.createElement('a');
+          link.href = URL.createObjectURL(blob);
+          link.download = 'meme.gif';
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          URL.revokeObjectURL(link.href);
+          setIsLoading(false);
+        });
+
+        gif.render();
+      } catch (err) {
+        console.error('GIF creation failed:', err);
+        setError('An error occurred while creating the GIF.');
+        setIsLoading(false);
+      }
+    }, 100);
   };
 
   const triggerFileUpload = () => {
@@ -97,7 +175,9 @@ const App: React.FC = () => {
               setFontSize={setFontSize}
               onFileChange={handleFileChange}
               onSuggestCaption={handleSuggestCaption}
+              onShare={handleShare}
               onDownload={handleDownload}
+              onDownloadGif={handleDownloadGif}
               fileInputRef={fileInputRef}
               onTriggerFileUpload={triggerFileUpload}
               isImageLoaded={!!imageSrc}
