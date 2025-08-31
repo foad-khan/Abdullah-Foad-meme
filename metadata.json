@@ -1,0 +1,5 @@
+{
+  "name": "Meme Generator",
+  "description": "Create hilarious memes by uploading your own image or generating one with AI. Get AI-powered caption suggestions to find the perfect punchline.",
+  "requestFramePermissions": []
+}
